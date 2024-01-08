@@ -2,6 +2,12 @@
 /dist
 /node_modules
 
+# Environment variables
+.env
+
+# Other Environment variables
+.env*
+
 # Logs
 logs
 *.log

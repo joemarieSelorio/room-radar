@@ -3,6 +3,7 @@ import { IUser } from './interfaces/user.interface';
 
 @Injectable()
 export class UsersService {
+  constructor() {}
   private readonly users: IUser[] = [];
 
   create(user: IUser) {
