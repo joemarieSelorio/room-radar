@@ -5,6 +5,8 @@ import {
   SignUpResponse,
   ConfirmSignUpCommand,
   ConfirmSignUpResponse,
+  ResendConfirmationCodeCommand,
+  ResendConfirmationCodeResponse,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { CognitoConfig } from './cognito.config';
 
@@ -50,7 +52,7 @@ export class CognitoService {
   }
 
   /**
-   * Cognito sign up service
+   * Cognito confirm sign up via verification code service
    * @param username - user's username
    * @param confirmationCode - confirmation code sent to user's email
    * @returns - Promise<ConfirmSignUpResponse>
@@ -66,6 +68,28 @@ export class CognitoService {
           ClientId: this.cognitoConfig.clientId,
           Username: userName,
           ConfirmationCode: confirmationCode,
+        }),
+      );
+    } catch (error) {
+      console.log(`${TAG} ${method} - error: ${error}`);
+    }
+  }
+
+  /**
+   * Cognito resend verfication code service
+   * @param userName - user's username
+   * @return - Promise<ResendConfirmationCodeResponse>
+   */
+  async resendConfirmationCode(
+    userName: string,
+  ): Promise<ResendConfirmationCodeResponse> {
+    const method = '[resendConfirmationCode]';
+
+    try {
+      return this.cognito.send(
+        new ResendConfirmationCodeCommand({
+          ClientId: this.cognitoConfig.clientId,
+          Username: userName,
         }),
       );
     } catch (error) {
