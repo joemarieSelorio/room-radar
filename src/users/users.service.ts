@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { IUser } from './interfaces/user.interface';
+import { CognitoService } from 'src/aws/cognito/cognito.service';
 
 @Injectable()
 export class UsersService {
-  constructor() {}
+  constructor(private cognitoService: CognitoService) {}
   private readonly users: IUser[] = [];
 
-  create(user: IUser) {
+  async create(user: IUser) {
     this.users.push(user);
+    return await this.cognitoService.cognitoSignUp(
+      user.username,
+      user.email,
+      user.password,
+    );
   }
 
   getAll() {
