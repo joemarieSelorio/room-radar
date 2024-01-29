@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { IUser } from './interfaces/user.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 import { CognitoService } from 'src/aws/cognito/cognito.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private cognitoService: CognitoService) {}
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private cognitoService: CognitoService,
+  ) {}
   private readonly users: IUser[] = [];
 
   async create(user: IUser) {
@@ -17,7 +24,7 @@ export class UsersService {
   }
 
   getAll() {
-    return this.users;
+    return this.userRepository.find();
   }
 
   getById(id: string) {
